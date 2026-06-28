@@ -27,7 +27,7 @@ Do the steps in this order — HA generates the public key partway through, so y
 At <https://developer.tesla.com/request>:
 
 - OAuth Grant Type: **Authorization Code and Machine-to-Machine**
-- Allowed Origin URL: `https://<your-subdomain>` (e.g. `https://tesla.example.com`)
+- Allowed Origin URL: `https://<your-subdomain>` (e.g. `https://tesla-api.yourownlane.com`)
 - Allowed Redirect URI: `https://my.home-assistant.io/redirect/oauth` (enable the *My Home Assistant* integration in HA first; otherwise use `<HA_URL>/auth/external/callback`)
 - Scopes: **Vehicle Information**, **Vehicle Location**, **Vehicle Commands**
 - Save the **Client ID** and **Client Secret** (View Details → Credentials & APIs)
@@ -41,7 +41,7 @@ HA → Settings → Devices & services → Add Integration → **Tesla Fleet**. 
 Two edits, then push. See the **Deploy** section below for full detail.
 
 1. Paste the public key copied from HA into `docs/.well-known/appspecific/com.tesla.3p.public-key.pem` (replace the placeholder block).
-2. Put your real subdomain in `docs/CNAME` (replace `tesla.example.com`).
+2. Put your real subdomain in `docs/CNAME` (replace `tesla-api.yourownlane.com`).
 3. Commit and push to a GitHub repo with Pages enabled (one-time setup below):
    ```bash
    git add -A && git commit -m "Set Tesla public key + domain" && git push
@@ -50,7 +50,7 @@ Two edits, then push. See the **Deploy** section below for full detail.
 Then verify hosting before pairing:
 
 ```bash
-./scripts/verify.sh <your-subdomain>     # e.g. ./scripts/verify.sh tesla.example.com
+./scripts/verify.sh <your-subdomain>     # e.g. ./scripts/verify.sh tesla-api.yourownlane.com
 ```
 
 You want `PASS: HTTP 200 and a valid ... PEM public key`.
@@ -83,13 +83,13 @@ This repo is already a Git repo with an initial commit. To publish the key file:
 1. Create an **empty** GitHub repo (e.g. `tesla-connector`). It can be public or private — GitHub Pages serves the site publicly either way; the only thing exposed is your *public* key, which is meant to be public.
 2. Add the remote and push:
    ```bash
-   git remote add origin git@github.com:<you>/tesla-connector.git
+   git remote add origin git@github.com:skylercall/tesla-connector.git
    git push -u origin main
    ```
 3. In the repo: **Settings → Pages → Build and deployment → Source: Deploy from a branch**, Branch: **`main`** / folder **`/docs`**. Save.
-4. Still on the Pages settings, set **Custom domain** to your subdomain (e.g. `tesla.example.com`) — this must match `docs/CNAME` and the Allowed Origin from step 1 of the runbook. Leave "Enforce HTTPS" on (it enables once the cert provisions).
-5. At your DNS provider, add a **CNAME** record: `tesla` → `<you>.github.io`. (GitHub Pages works with any DNS host — no need to move your domain to anyone.)
-6. Wait for DNS + HTTPS to provision (minutes to ~an hour), then run `./scripts/verify.sh tesla.example.com`.
+4. Still on the Pages settings, set **Custom domain** to your subdomain (e.g. `tesla-api.yourownlane.com`) — this must match `docs/CNAME` and the Allowed Origin from step 1 of the runbook. Leave "Enforce HTTPS" on (it enables once the cert provisions).
+5. At your DNS provider, add a **CNAME** record: `tesla-api` → `skylercall.github.io`. (GitHub Pages works with any DNS host — no need to move your domain to anyone.)
+6. Wait for DNS + HTTPS to provision (minutes to ~an hour), then run `./scripts/verify.sh tesla-api.yourownlane.com`.
 
 After this, every change is one command: edit the file, `git push`, done.
 
