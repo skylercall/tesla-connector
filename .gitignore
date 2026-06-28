@@ -1,0 +1,10 @@
+# Never commit a PRIVATE key. Home Assistant keeps it at config/tesla_fleet.key;
+# only the PUBLIC key (docs/.well-known/.../com.tesla.3p.public-key.pem) belongs here.
+*.key
+*private*.pem
+private-key.pem
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
